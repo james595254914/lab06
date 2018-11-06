@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
  int next = start+1;
  first =0;
  while(start < next){
- if((fd = fopen("/sys/bus/w1/devices/28-0316838a35ff/w1_slave", "r")) == (FILE *)NULL) {
+ if((fd = fopen("/sys/bus/w1/devices/28-021312c431aa/w1_slave", "r")) == (FILE *)NULL) {
  perror("Error: Failed to Open w1_slave file");
  (void) exit(1);
  }
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	sprintf(l,"Lowest Temp: %.1f C",low);
 	sprintf(cur,"Current Temp: %.1f C",y);
 	sprintf(h,"Highest Temp: %.1f C",high);
-	ifttt("https://maker.ifttt.com/trigger/alarm_triggered/with/key/2Mz3ov7UhIub7OYdrCQH0", l,cur, h);
+	ifttt("https://maker.ifttt.com/trigger/666/with/key/_A-qdtIfEaA8ZoeM3Fgkq", l,cur, h);
 	}
  else{
 	if(y <low){low = y;}
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 	sprintf(l,"Lowest Temp: %.1f C",low);
 	sprintf(cur,"Current Temp: %.1f C",y);
 	sprintf(h,"Highest Temp: %.1f C",high);
-	ifttt("https://maker.ifttt.com/trigger/alarm_triggered/with/key/2Mz3ov7UhIub7OYdrCQH0", l,cur, h);
+	ifttt("https://maker.ifttt.com/trigger/666/with/key/_A-qdtIfEaA8ZoeM3Fgkq", l,cur, h);
 	last = y;
 	}
 	}
