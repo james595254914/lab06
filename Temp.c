@@ -5,16 +5,17 @@
 #include "ifttt.h"
 int main(int argc, char *argv[])
 {
- FILE *fd;    // file pointer
- int n,y,high,low,first,last; //y is current, first is boolean,last is last t
+ FILE *fd;
+ int n, first, last;
+ double y, high, low;
  char buf[101];
- char *temp;    // temp pointer
- char l[50], cur[50],h[50];    //different temp message store
- time_t start = time(NULL);  //current time
- int next = start+1;           // iterator in loop
- first =0;                       // boolean false
+ char *temp;
+ char l[50], cur[50],h[50];
+ time_t start = time(NULL);
+ int next = start+1;
+ first =0;
  while(start < next){
- if((fd = fopen("/sys/bus/w1/devices/28-0213133656aa/w1_slave", "r")) == (FILE *)NULL) {
+ if((fd = fopen("/sys/bus/w1/devices/28-0316838a35ff/w1_slave", "r")) == (FILE *)NULL) {
  perror("Error: Failed to Open w1_slave file");
  (void) exit(1);
  }
@@ -23,38 +24,38 @@ int main(int argc, char *argv[])
  perror("Error: No Arguments Found");
  exit(1);
  }
- buf[n] = '\0';          
- fprintf(stdout, "Read '%s'\n",buf+69);   //location after 69 is temp show in screen
+ buf[n] = '\0';
+ fprintf(stdout, "Read %s\n",buf+69);
  (void) fclose(fd);
- temp = buf+69;//temp print after t =29750 
+ temp = buf+69;
  printf("Temp: %s",temp);
- y = atoi(temp);       //change from char to int
- printf("Integer Y: %d\n",y);
- if(first == 0){  //first temp read
+ y = atof(temp);
+ y=y/1000;
+ printf("Integer Y: %.1f\n",y);
+ if(first == 0){
 	low = y;
 	high = y;
 	first =1;
 	last = y;
-	sprintf(l,"Lowest Temp: %d C",low/1000);
-	sprintf(cur,"Current Temp: %d C",y/1000);
-	sprintf(h,"Highest Temp: %d C",high/1000);
-	ifttt("https://maker.ifttt.com/trigger/temp_change/with/key/qUjk5_1YTEvBRpXGUmjd4", l,cur, h);
+	sprintf(l,"Lowest Temp: %.1f C",low);
+	sprintf(cur,"Current Temp: %.1f C",y);
+	sprintf(h,"Highest Temp: %.1f C",high);
+	ifttt("https://maker.ifttt.com/trigger/alarm_triggered/with/key/2Mz3ov7UhIub7OYdrCQH0", l,cur, h);
 	}
  else{
 	if(y <low){low = y;}
-	else if(y>high){high = y;}
-	else if(((last-low)>=1000) ||((high-last)>=1000)){
-	sprintf(l,"Lowest Temp: %d C",low/1000);
-        sprintf(cur,"Current Temp: %d C",y/1000);
-        sprintf(h,"Highest Temp: %d C",high/1000);
-	  ifttt("https://maker.ifttt.com/trigger/temp_change/with/key/qUjk5_1YTEvBRpXGUmjd4", l,cur, h);
-	  last = y;
+	if(y>high){high = y;}
+	if(((last-y)>=1) ||((y-last)>=1)){
+	sprintf(l,"Lowest Temp: %.1f C",low);
+	sprintf(cur,"Current Temp: %.1f C",y);
+	sprintf(h,"Highest Temp: %.1f C",high);
+	ifttt("https://maker.ifttt.com/trigger/alarm_triggered/with/key/2Mz3ov7UhIub7OYdrCQH0", l,cur, h);
+	last = y;
 	}
-	
 	}
- printf("High: %d Current: %d Low: %d\n",high,y,low);
+ printf("High: %.1f Current: %.1f Low: %.1f\n",high,y,low);
  start = time(NULL);
- next = start+1;                    //reassign the next to make loop continue
+ next = start+1;
 }
  return 0;
 }
